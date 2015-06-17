@@ -1,8 +1,73 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* {
+	margin: 0px;
+	padding: 0px;
 }
 
-a {
-  color: #00B7FF;
+body {
+  font: 16px "Trebuchet MS", Helvetica, sans-serif;
+}
+
+#page-wrap {
+	margin: 2% auto;
+	color: white;
+}
+
+#page-wrap > .main {
+	border: 1px solid #999;
+	padding: 1%;
+	margin-bottom: 1px;
+	color: #AA3939;
+}
+
+section > div {
+	padding: 20px;
+}
+
+header h2 {
+	color: #AA3939;
+}
+
+header {
+	background: #FFBFBF;
+	text-align: center;
+}
+
+nav, section {
+	background: #eee;
+	text-align: center;
+}
+
+footer {
+	background: #eee;
+	text-align: center;
+}
+
+nav span {
+	margin: 0px 10px 0px 0px;
+}
+
+nav span a {
+	color: #AA3939;
+	text-decoration: none;
+}
+
+nav span a:hover {
+	font-weight: bold;
+}
+
+section p a {
+	color: #AA3939;
+	text-decoration: none;
+}
+
+section p a:hover {
+	text-decoration: underline;
+}
+
+.button {
+	color: #eee;
+	border-radius: 4px;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	background: #AA3939;
+	padding: 1px 3px 0px 2px;
 }

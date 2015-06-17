@@ -3,7 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<title><%= appTitle %></title>
-		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+		<link rel="stylesheet" type="text/css" media="only screen and (max-device-width: 480px)" href="/stylesheets/smartphone.css" />
+		<link rel="stylesheet" type="text/css" media="only screen and (min-width: 530px) and (min-device-width: 481px)" href="/stylesheets/wide.css" />
 	</head>
 	<body>
 		<div id="page-wrap">
@@ -14,7 +16,7 @@
 
 			<nav class="main" id="n1" role="navigation">
 				<span><a href="/">Inicio</a></span>
-				<span><a href="/quizes/question">Jugar ahora!</a></span>
+				<span><a href="/quizes/question">Jugar!</a></span>
 			</nav>
 
 			<section class="main" id="s1">
