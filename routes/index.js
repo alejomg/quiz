@@ -17,4 +17,13 @@ router.get('/', function(req, res) {
 router.get('/quizes/question', quizController.question);
 router.get('/quizes/answer', quizController.answer);
 
+/* GET author page. */
+router.get('/author', function(req, res) {
+  res.render('author', {
+  	appTitle: 'Quiz',
+  	intro: 'Quiz: el juego de preguntas y respuestas.',
+  	author: 'Alejandro Martínez Gallego.'
+  });
+});
+
 module.exports = router;
