@@ -4,6 +4,8 @@ var path = require("path");
 
 // Postgres DATABASE_URL=postgres://user:password@host:port/database
 // SQLite   DATABASE_URL=sqlite://:@:/
+//var dbURL = process.env.DATABASE_URL || "sqlite://:@:/";
+//var url = dbURL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var protocol = (url[1] || null);
 var dialect  = (url[1] || null);
@@ -36,15 +38,23 @@ var Quiz = sequelize.import(path.join(__dirname, "quiz"));
 exports.Quiz = Quiz;
 
 // sequelize.sync() crea e inicializa la DB
-sequelize.sync().success(function() {
-	Quiz.count().success(function(count) {
+sequelize.sync().then(function() {
+	Quiz.count().then(function(count) {
 		// si no hay ningún registro en la tabla, se añaden para inicializarla
 		if(count === 0) {
+			Quiz.create({
+				pregunta: "Capital de Egipto",
+				respuesta: "El Cairo"
+			})
+			Quiz.create({
+				pregunta: "Capital de Inglaterra",
+				respuesta: "Londres"
+			})
 			Quiz.create({
 				pregunta: "Capital de Turquía",
 				respuesta: "Ankara"
 			})
-			.success(function(){console.log("DB started!!")});
+			.then(function(){console.log("DB started!!")});
 		}
 	});
 });
