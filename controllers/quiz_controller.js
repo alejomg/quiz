@@ -1,84 +1,73 @@
 // se importa el modelo de DB
 var models = require("../models/models.js");
 
-
-/* acciones del controlador y sus vistas asociadas */
-
-/*
-// GET /quizes/question
-exports.question = function(req, res) {
-	models.Quiz.findAll().success(function(quiz) {
-		res.render('quizes/question', {
-			appTitle: 'Quiz',
-			intro: 'Quiz: el juego de preguntas y respuestas.',
-			pregunta: quiz[0].pregunta
-		})
-	});
+// autoload: se ejecuta si la ruta incluye quizId
+// a la vez, también se refactoriza el código
+exports.load = function(req, res, next, quizId) {
+	models.Quiz.find(quizId)
+	.then(
+		function(quiz) {
+			if(quiz) {
+				req.quiz = quiz;
+				next();
+			}
+			else {
+				next(new Error("No existe una pregunta con id: " + quizId));
+			}
+		}
+	)	
+	.catch(
+		function(error) {
+			next(error);
+		}
+	);
 };
 
-// GET /quizes/answer
-exports.answer = function(req, res) {
-	models.Quiz.findAll().success(function(quiz) {
-		if(req.query.respuesta.toUpperCase() === quiz[0].respuesta.toUpperCase()) {
-			res.render('quizes/answer', {
-				appTitle: 'Quiz',
-				intro: 'Quiz: el juego de preguntas y respuestas.',
-				solucion: 'Correcto'
-			});
-		}
-		else {
-			res.render('quizes/answer', {
-				appTitle: 'Quiz',
-				intro: 'Quiz: el juego de preguntas y respuestas.',
-				solucion: 'Incorrecto'
-			});
-		}
-	});
-};
-*/
+/* acciones del controlador, variables y sus vistas asociadas */
+var _appTitle = "NeoQuiz";
+var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 
 // GET /quizes
 exports.index = function(req, res) {
-	models.Quiz.findAll().then(function(quizes) {
-		res.render('quizes/index.ejs', {
-			appTitle: 'Quiz',
-			intro: 'Quiz: el juego de preguntas y respuestas.',
-			quizes: quizes
-		})
-	});
+	models.Quiz.findAll()
+	.then(
+		function(quizes) {
+			res.render('quizes/index', {
+				appTitle: _appTitle,
+				intro: _intro,
+				quizes: quizes
+			});
+		}
+	)	
+	.catch(
+		function(error) {
+			next(error);
+		}
+	);
 };
 
 // GET /quizes/:id
 exports.show = function(req, res) {
-	models.Quiz.find(req.params.quizId).then(function(quiz) {
-		res.render('quizes/show', {
-			appTitle: 'Quiz',
-			intro: 'Quiz: el juego de preguntas y respuestas.',
-			quiz: quiz
-		})
+	res.render('quizes/show', {
+		appTitle: _appTitle,
+		intro: _intro,
+		quiz: req.quiz
 	});
 };
 
 // GET /quizes/:id/answer
 exports.answer = function(req, res) {
-	models.Quiz.find(req.params.quizId).then(function(quiz) {
-		if(req.query.respuesta.toUpperCase() === quiz.respuesta.toUpperCase()) {
-			res.render('quizes/answer', {
-				appTitle: 'Quiz',
-				intro: 'Quiz: el juego de preguntas y respuestas.',
-				solucion: 'Correcto',
-				resultado: 1,
-				quiz: quiz
-			});
-		}
-		else {
-			res.render('quizes/answer', {
-				appTitle: 'Quiz',
-				intro: 'Quiz: el juego de preguntas y respuestas.',
-				solucion: 'Incorrecto',
-				resultado: 0,
-				quiz: quiz
-			});
-		}
+	var solucion = "Incorrecto";
+	var resultado = 0;
+	if(req.query.respuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
+		solucion = "Correcto";
+		resultado = 1;
+	}
+	res.render('quizes/answer', {
+		appTitle: _appTitle,
+		intro: _intro,
+		solucion: solucion,
+		resultado: resultado,
+		quiz: req.quiz
 	});
 };
