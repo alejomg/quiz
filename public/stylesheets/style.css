@@ -64,6 +64,19 @@ section p a:hover {
 	text-decoration: underline;
 }
 
+section td {
+	text-align: left;
+}
+
+section td a {
+	color: #AA3939;
+	text-decoration: none;
+}
+
+section td a:hover {
+	text-decoration: underline;
+}
+
 .button {
 	color: #eee;
 	border-radius: 4px;

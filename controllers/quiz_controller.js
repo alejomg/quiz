@@ -67,6 +67,7 @@ exports.answer = function(req, res) {
 				appTitle: 'Quiz',
 				intro: 'Quiz: el juego de preguntas y respuestas.',
 				solucion: 'Correcto',
+				resultado: 1,
 				quiz: quiz
 			});
 		}
@@ -75,6 +76,7 @@ exports.answer = function(req, res) {
 				appTitle: 'Quiz',
 				intro: 'Quiz: el juego de preguntas y respuestas.',
 				solucion: 'Incorrecto',
+				resultado: 0,
 				quiz: quiz
 			});
 		}

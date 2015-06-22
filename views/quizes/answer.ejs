@@ -1,4 +1,8 @@
 <p>
 	<%= solucion %><br /><br />
-	<a href="/quizes/<%= quiz.id %>">Juegue de nuevo</a>
+	<% if(resultado === 1) { %>
+		<a href="/quizes">Juegue de nuevo</a>
+	<% } else { %>
+		<a href="/quizes/<%= quiz.id %>">Inténtelo de nuevo</a>
+	<%  } %>
 </p>
