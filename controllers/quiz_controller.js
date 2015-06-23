@@ -32,7 +32,7 @@ exports.index = function(req, res) {
 	var search = (req.query.search) ? "%" + req.query.search + "%" : "%";
 	search = search.replace(/ /g, "%");
 	console.log("buscando: " + search);
-	models.Quiz.findAll({where: ["pregunta like ?", search]})
+	models.Quiz.findAll({where: ["pregunta like ?", search], order: [["pregunta", "ASC"]]})
 	.then(
 		function(quizes) {
 			res.render('quizes/index', {
