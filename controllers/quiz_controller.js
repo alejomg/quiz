@@ -29,7 +29,10 @@ var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 
 // GET /quizes
 exports.index = function(req, res) {
-	models.Quiz.findAll()
+	var search = (req.query.search) ? "%" + req.query.search + "%" : "%";
+	search = search.replace(/ /g, "%");
+	console.log("buscando: " + search);
+	models.Quiz.findAll({where: ["pregunta like ?", search]})
 	.then(
 		function(quizes) {
 			res.render('quizes/index', {
