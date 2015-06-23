@@ -55,6 +55,19 @@ nav span a:hover {
 	font-weight: bold;
 }
 
+nav td {
+	text-align: left;
+}
+
+nav td a {
+	color: #AA3939;
+	text-decoration: none;
+}
+
+nav td a:hover {
+	font-weight: bold;
+}
+
 section p a {
 	color: #AA3939;
 	text-decoration: none;
