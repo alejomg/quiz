@@ -16,7 +16,8 @@ router.get("/", function(req, res) {
   res.render("index", {
   	appTitle: _appTitle,
   	intro: _bienvenida,
-  	descripcion: _descripcion
+  	descripcion: _descripcion,
+    errors: []
   });
 });
 
@@ -38,7 +39,8 @@ router.get("/author", function(req, res) {
   res.render("author", {
   	appTitle: _appTitle,
   	intro: _intro,
-  	author: _author
+  	author: _author,
+    errors: []
   });
 });
 

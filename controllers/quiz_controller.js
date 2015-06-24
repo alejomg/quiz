@@ -38,7 +38,8 @@ exports.index = function(req, res) {
 			res.render('quizes/index', {
 				appTitle: _appTitle,
 				intro: _intro,
-				quizes: quizes
+				quizes: quizes,
+				errors: []
 			});
 		}
 	)	
@@ -54,7 +55,8 @@ exports.show = function(req, res) {
 	res.render('quizes/show', {
 		appTitle: _appTitle,
 		intro: _intro,
-		quiz: req.quiz
+		quiz: req.quiz,
+		errors: []
 	});
 };
 
@@ -71,7 +73,8 @@ exports.answer = function(req, res) {
 		intro: _intro,
 		solucion: solucion,
 		resultado: resultado,
-		quiz: req.quiz
+		quiz: req.quiz,
+		errors: []
 	});
 };
 
@@ -85,7 +88,8 @@ exports.new = function(req, res) {
 	res.render('quizes/new', {
 		appTitle: _appTitle,
 		intro: _intro,
-		quiz: quiz
+		quiz: quiz,
+		errors: []
 	});
 };
 
@@ -94,12 +98,29 @@ exports.create = function(req, res) {
 	// se recupera el objeto Quiz de la request
 	var quiz = models.Quiz.build(req.body.quiz);
 
-	// se guarda en DB un registro con los datos del objeto recuperado
-	// y despues se redirige a la lista de preguntas
-	quiz.save({fields: ["pregunta", "respuesta"]})
+	// validamos los campos de la tabla
+	quiz.validate()
 	.then(
-		function(){
-			res.redirect("/quizes");
+		function(err) {
+			if(err) {
+				// si hay errores, mostramos la pagina de preguntas indicando los errores
+				res.render('quizes/new', {
+					appTitle: _appTitle,
+					intro: _intro,
+					quiz: quiz,
+					errors: err.errors
+				});
+			}
+			else {
+				// si no hay errores, se guarda en DB un registro con los datos del objeto recuperado
+				// y despues se redirige a la lista de preguntas
+				quiz.save({fields: ["pregunta", "respuesta"]})
+				.then(
+					function(){
+						res.redirect("/quizes");
+					}
+				);
+			}
 		}
 	);
 };

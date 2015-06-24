@@ -51,7 +51,8 @@ if (app.get("env") === "development") {
             appTitle: _appTitle,
             intro: _intro,
             message: err.message,
-            error: err
+            error: err,
+            errors: []
         });
     });
 }
@@ -64,7 +65,8 @@ app.use(function(err, req, res, next) {
         appTitle: _appTitle,
         intro: _intro,
         message: err.message,
-        error: {}
+        error: {},
+        errors: []
     });
 });
 

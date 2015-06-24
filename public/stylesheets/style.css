@@ -9,7 +9,7 @@ body {
 
 #page-wrap {
 	margin: 2% auto;
-	color: white;
+	color: #FFF;
 }
 
 #page-wrap > .main {
@@ -17,6 +17,11 @@ body {
 	padding: 1%;
 	margin-bottom: 1px;
 	color: #AA3939;
+}
+
+#errorMsgs {
+	color: #A00;
+	font-size: smaller;
 }
 
 section > div {
@@ -33,12 +38,12 @@ header {
 }
 
 nav, section {
-	background: #eee;
+	background: #EEE;
 	text-align: center;
 }
 
 footer {
-	background: #eee;
+	background: #EEE;
 	text-align: center;
 }
 

@@ -25,6 +25,14 @@
 			</nav>
 
 			<section class="main" id="s1">
+				<% if(errors.length) { %>
+					<span id="errorMsgs">
+						Corrija lo siguiente:<br />
+						<% for(var i = 0; i < errors.length; i++) { %>
+							<spam><%= errors[i].message %></spam><br />
+						<% } %>
+					</span>
+				<% } %>
 				<br />
 				<%- body %>
 			</section>
