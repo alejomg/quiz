@@ -4,12 +4,14 @@ var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-var methodOverride = require("method-override");
 
 //añade vistas parciales y permite crear un layout común a la aplicación
 var partials = require("express-partials");
 
 var routes = require("./routes/index");
+
+// se añade para gestionar los metodos PUT y DELETE, pasandole el parametro _method
+var methodOverride = require("method-override");
 
 var app = express();
 
