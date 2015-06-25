@@ -124,3 +124,48 @@ exports.create = function(req, res) {
 		}
 	);
 };
+
+// GET /quizes/:id/edit
+exports.edit = function(req, res) {
+	res.render('quizes/edit', {
+		appTitle: _appTitle,
+		intro: _intro,
+		quiz: req.quiz,
+		errors: []
+	});
+};
+
+// PUT /quizes/:id
+exports.update = function(req, res) {
+	// se recuperan los valores del objeto Quiz del body y se guardan en el objeto Quiz de la request
+	req.quiz.pregunta = req.body.quiz.pregunta;
+	req.quiz.respuesta = req.body.quiz.respuesta;
+	// ¿se podría recuperar asi? Probarlo
+	// req.quiz = models.Quiz.build(req.body.quiz);
+
+	// validamos los campos de la tabla
+	req.quiz.validate()
+	.then(
+		function(err) {
+			if(err) {
+				// si hay errores, mostramos la pagina de edición indicando los errores
+				res.render('quizes/edit', {
+					appTitle: _appTitle,
+					intro: _intro,
+					quiz: req.quiz,
+					errors: err.errors
+				});
+			}
+			else {
+				// si no hay errores, se actualiza en DB el registro con los datos del objeto
+				// y despues se redirige a la lista de preguntas
+				req.quiz.save({fields: ["pregunta", "respuesta"]})
+				.then(
+					function(){
+						res.redirect("/quizes");
+					}
+				);
+			}
+		}
+	);
+};
