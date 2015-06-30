@@ -30,15 +30,24 @@ var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 // GET /quizes
 exports.index = function(req, res) {
 	var search = (req.query.search) ? "%" + req.query.search + "%" : "%";
+	var idTema = (req.query.idTema) ? req.query.idTema : "%";
 	search = search.replace(/ /g, "%");
-	console.log("buscando: " + search);
-	models.Quiz.findAll({where: ["pregunta like ?", search], order: [["pregunta", "ASC"]]})
+	console.log("buscando: " + search + " tema: " + idTema);
+	var _temas;
+	models.Tema.findAll({order: [["descripcion", "ASC"]]})
+	.then(
+		function(temas) {
+			_temas = temas;
+		}
+	)
+	models.Quiz.findAll({where: ['pregunta like ? and TemaId like ?', search, idTema], order: [["pregunta", "ASC"]]})
 	.then(
 		function(quizes) {
 			res.render('quizes/index', {
 				appTitle: _appTitle,
 				intro: _intro,
 				quizes: quizes,
+				temas: _temas,
 				errors: []
 			});
 		}
@@ -85,18 +94,26 @@ exports.new = function(req, res) {
 		pregunta: "pregunta",
 		respuesta: "respuesta"
 	});
-	res.render('quizes/new', {
-		appTitle: _appTitle,
-		intro: _intro,
-		quiz: quiz,
-		errors: []
-	});
+	
+	models.Tema.findAll({order: [["descripcion", "ASC"]]})
+	.then(
+		function(temas) {
+			res.render('quizes/new', {
+				appTitle: _appTitle,
+				intro: _intro,
+				quiz: quiz,
+				temas: temas,
+				errors: []
+			});
+		}
+	);
 };
 
 // POST /quizes/create
 exports.create = function(req, res) {
 	// se recupera el objeto Quiz de la request
 	var quiz = models.Quiz.build(req.body.quiz);
+	console.log("paso por aqui: " + quiz.TemaId);
 
 	// validamos los campos de la tabla
 	quiz.validate()
@@ -114,7 +131,8 @@ exports.create = function(req, res) {
 			else {
 				// si no hay errores, se guarda en DB un registro con los datos del objeto recuperado
 				// y despues se redirige a la lista de preguntas
-				quiz.save({fields: ["pregunta", "respuesta"]})
+				//quiz.save({fields: ["pregunta", "respuesta", "TemaId"]}) //si se quiere guardar solo unos campos en concreto
+				quiz.save()
 				.then(
 					function(){
 						res.redirect("/quizes");
@@ -127,12 +145,18 @@ exports.create = function(req, res) {
 
 // GET /quizes/:id/edit
 exports.edit = function(req, res) {
-	res.render('quizes/edit', {
-		appTitle: _appTitle,
-		intro: _intro,
-		quiz: req.quiz,
-		errors: []
-	});
+	models.Tema.findAll({order: [["descripcion", "ASC"]]})
+	.then(
+		function(temas) {
+			res.render('quizes/edit', {
+				appTitle: _appTitle,
+				intro: _intro,
+				quiz: req.quiz,
+				temas: temas,
+				errors: []
+			});
+		}
+	);
 };
 
 // PUT /quizes/:id
@@ -140,8 +164,9 @@ exports.update = function(req, res) {
 	// se recuperan los valores del objeto Quiz del body y se guardan en el objeto Quiz de la request
 	req.quiz.pregunta = req.body.quiz.pregunta;
 	req.quiz.respuesta = req.body.quiz.respuesta;
-	// ¿se podría recuperar asi? Probarlo
-	// req.quiz = models.Quiz.build(req.body.quiz);
+	req.quiz.TemaId = req.body.quiz.TemaId;
+	// ¿se podría recuperar asi? NO!! lo que hace es crear un objeto nuevo y un insert
+	//req.quiz = models.Quiz.build(req.body.quiz);
 
 	// validamos los campos de la tabla
 	req.quiz.validate()
@@ -159,7 +184,8 @@ exports.update = function(req, res) {
 			else {
 				// si no hay errores, se actualiza en DB el registro con los datos del objeto
 				// y despues se redirige a la lista de preguntas
-				req.quiz.save({fields: ["pregunta", "respuesta"]})
+				//req.quiz.save({fields: ["pregunta", "respuesta", "TemaId"]}) //si se quiere guardar solo unos campos en concreto
+				req.quiz.save()
 				.then(
 					function(){
 						res.redirect("/quizes");

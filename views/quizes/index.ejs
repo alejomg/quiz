@@ -10,13 +10,23 @@
 			</td>
 		</tr>
 	<% } %>
-	<tr>
-		<td>
-			<br /><br /><br />
-			<form method="get" action="/quizes">
+	<form method="get" action="/quizes">
+		<tr>
+			<td colspan="3">
+				<br /><br /><br />
+				<select name="idTema">
+					<option value=""></option>
+					<% var i; for(i = 0; i < temas.length; i++) { %>
+						<option value="<%= temas[i].id %>"><%= temas[i].descripcion %></option>
+					<% } %>
+				</select>
 				<input type="text" name="search" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
 				<input type="submit" class="button" value="Buscar" />
-			</form>
-		</td>
-	</tr>
+			</td>
+		</tr>
+	</form>
 </table>

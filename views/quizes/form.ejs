@@ -2,5 +2,11 @@
 <input id="pregunta" type="text" name="quiz[pregunta]" value="<%= quiz.pregunta %>" /><br /><br />
 <label for="respuesta" class="rem">Respuesta:</label>
 <input id="respuesta" type="text" name="quiz[respuesta]" value="<%= quiz.respuesta %>" /><br /><br />
+<label for="idTema" class="rem">Tema:</label>
+<select name="quiz[TemaId]">
+	<% var i; for(i = 0; i < temas.length; i++) { %>
+		<option value="<%= temas[i].id %>" <% if(temas[i].id === quiz.TemaId) {%> selected <%}%> ><%= temas[i].descripcion %></option>
+	<% } %>
+</select><br /><br />
 <input type="submit" class="button" value="Guardar" />
 <a href="/quizes"><input type="button" class="button" value="Cancelar" /></a>

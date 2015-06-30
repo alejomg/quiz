@@ -31,16 +31,46 @@ var sequelize = new Sequelize(DB_name, user, password,
 					omitNull: true    // solo Postgres
 				});
 
-// importar a la DB la definición de la tabla Quiz que está en quiz.js
+// importar a la DB la definición de las tablas
 var Quiz = sequelize.import(path.join(__dirname, "quiz"));
+var Tema = sequelize.import(path.join(__dirname, "tema"));
 
-// exportar la definición de la tabla Quiz
+// definición de relaciones entre tablas
+Quiz.belongsTo(Tema);
+Tema.hasMany(Quiz);
+
+// exportar la definición de las tablas
 exports.Quiz = Quiz;
+exports.Tema = Tema;
 
 // sequelize.sync() crea e inicializa la DB
 sequelize.sync()
 .then(
 	function() {
+		Tema.count()
+		.then(
+			function(count) {
+				// si no hay ningún registro en la tabla, se añaden para inicializarla
+				if(count === 0) {
+					Tema.create({
+						descripcion: "Ciencia"
+					})
+					Tema.create({
+						descripcion: "Humanidades"
+					})
+					Tema.create({
+						descripcion: "Ocio"
+					})
+					Tema.create({
+						descripcion: "Tecnología"
+					})
+					Tema.create({
+						descripcion: "Otro"
+					})
+					.then(function(){console.log("Table Tema created!!")});
+				}
+			}
+		);
 		Quiz.count()
 		.then(
 			function(count) {
@@ -48,23 +78,33 @@ sequelize.sync()
 				if(count === 0) {
 					Quiz.create({
 						pregunta: "Capital de Inglaterra",
-						respuesta: "Londres"
+						respuesta: "Londres",
+						TemaId: 2
 					})
 					Quiz.create({
 						pregunta: "Capital de Turquía",
-						respuesta: "Ankara"
+						respuesta: "Ankara",
+						TemaId: 2
 					})
 					Quiz.create({
 						pregunta: "Capital de Perú",
-						respuesta: "Lima"
+						respuesta: "Lima",
+						TemaId: 2
 					})
 					Quiz.create({
 						pregunta: "Capital de Egipto",
-						respuesta: "El Cairo"
+						respuesta: "El Cairo",
+						TemaId: 2
 					})
-					.then(function(){console.log("DB started!!")});
+					Quiz.create({
+						pregunta: "Mayor buscador en internet",
+						respuesta: "Google",
+						TemaId: 4
+					})
+					.then(function(){console.log("Table Quiz created!!")});
 				}
 			}
 		);
+		console.log("DB started!!");
 	}
 );
