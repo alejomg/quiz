@@ -28,7 +28,7 @@ var _appTitle = "NeoQuiz";
 var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 
 // GET /quizes
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
 	var search = (req.query.search) ? "%" + req.query.search + "%" : "%";
 	var idTema = (req.query.idTema) ? req.query.idTema : "%";
 	search = search.replace(/ /g, "%");
@@ -197,7 +197,7 @@ exports.update = function(req, res) {
 };
 
 // DELETE /quizes/:id
-exports.destroy = function(req, res) {
+exports.destroy = function(req, res, next) {
 	req.quiz.destroy()
 	.then(
 		function(){
