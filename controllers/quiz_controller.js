@@ -30,9 +30,10 @@ var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 // GET /quizes
 exports.index = function(req, res, next) {
 	var search = (req.query.search) ? "%" + req.query.search + "%" : "%";
-	var idTema = (req.query.idTema) ? req.query.idTema : "%";
+	var idTema = (req.query.idTema) ? req.query.idTema : false;
+	var cadenaWhere = (idTema) ? 'pregunta like ? and "TemaId" = ?' : 'pregunta like ?';
 	search = search.replace(/ /g, "%");
-	console.log("buscando: " + search + " tema: " + idTema);
+	console.log("buscando: " + search + " tema: " + idTema + " con cadena: " + cadenaWhere);
 	var _temas;
 	models.Tema.findAll({order: [["descripcion", "ASC"]]})
 	.then(
@@ -40,7 +41,7 @@ exports.index = function(req, res, next) {
 			_temas = temas;
 		}
 	)
-	models.Quiz.findAll({where: ['pregunta like ? and "TemaId" like ?', search, idTema], order: [["pregunta", "ASC"]]})
+	models.Quiz.findAll({where: [cadenaWhere, search, idTema], order: [["pregunta", "ASC"]]})
 	.then(
 		function(quizes) {
 			res.render('quizes/index', {
