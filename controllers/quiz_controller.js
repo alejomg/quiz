@@ -40,7 +40,7 @@ exports.index = function(req, res, next) {
 			_temas = temas;
 		}
 	)
-	models.Quiz.findAll({where: ['pregunta like ? and TemaId like ?', search, idTema], order: [["pregunta", "ASC"]]})
+	models.Quiz.findAll({where: ['pregunta like ? and "TemaId" like ?', search, idTema], order: [["pregunta", "ASC"]]})
 	.then(
 		function(quizes) {
 			res.render('quizes/index', {
