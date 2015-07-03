@@ -1,0 +1,7 @@
+<p>
+	<form method="post" action="/quizes/<%= quiz.id %>/comments">
+		Añadir comentario para '<%= quiz.pregunta %>'<br /><br />
+		<input type="text" id="comment" name="comment[texto]" value="" />
+		<input type="submit" class="button" value="Enviar" />
+	</form>
+</p>

@@ -1,8 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
-// se importa el controller con la lógica
+// se importan los controllers con la lógica
 var quizController = require("../controllers/quiz_controller");
+var commentController = require("../controllers/comment_controller");
 
 /* variables de la app */
 var _appTitle = "NeoQuiz";
@@ -25,9 +26,8 @@ router.get("/", function(req, res) {
 // debe definirse antes de las rutas donde se va a usar
 router.param("quizId", quizController.load);
 
-// cada ruta que se define en el enrutador tiene que tener una acción asociada
-//router.get("/quizes/question", quizController.question);
-//router.get("/quizes/answer", quizController.answer);
+/* cada ruta que se define en el enrutador tiene que tener una acción asociada */
+// rutas de quizController
 router.get("/quizes", quizController.index);
 router.get("/quizes/:quizId(\\d+)", quizController.show);
 router.get("/quizes/:quizId(\\d+)/answer", quizController.answer);
@@ -36,6 +36,11 @@ router.post("/quizes/create", quizController.create);
 router.get("/quizes/:quizId(\\d+)/edit", quizController.edit);
 router.put("/quizes/:quizId(\\d+)", quizController.update);
 router.delete("/quizes/:quizId(\\d+)", quizController.destroy);
+
+// rutas de commentController
+router.get("/quizes/:quizId(\\d+)/comments/new", commentController.new);
+router.post("/quizes/:quizId(\\d+)/comments", commentController.create);
+
 
 /* GET author page. */
 router.get("/author", function(req, res) {
