@@ -8,6 +8,9 @@ var bodyParser = require("body-parser");
 //añade vistas parciales y permite crear un layout común a la aplicación
 var partials = require("express-partials");
 
+//gestiona las sesiones de la aplicación
+var session = require("express-session");
+
 var routes = require("./routes/index");
 
 // se añade para gestionar los metodos PUT y DELETE, pasandole el parametro _method
@@ -31,9 +34,22 @@ app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser("NeoQuiz"));//el string del parametro es una semilla para mayor seguridad al generar el cifrado de las cookies
+app.use(session());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+
+// helpers dinámicos
+app.use(function(req, res, next) {
+    // se guarda el path en req.session.redir para después de hacer login volver a donde estaba
+    if(!req.path.match(/\/login|\/logout/)) {
+        req.session.redir = req.path;
+    }
+
+    // se hace visible req.session en las vistas
+    res.locals.session = req.session;
+    next();
+});
 
 app.use("/", routes);
 

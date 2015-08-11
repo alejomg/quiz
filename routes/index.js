@@ -4,6 +4,7 @@ var router = express.Router();
 // se importan los controllers con la lógica
 var quizController = require("../controllers/quiz_controller");
 var commentController = require("../controllers/comment_controller");
+var sessionController = require("../controllers/session_controller");
 
 /* variables de la app */
 var _appTitle = "NeoQuiz";
@@ -27,6 +28,11 @@ router.get("/", function(req, res) {
 router.param("quizId", quizController.load);
 
 /* cada ruta que se define en el enrutador tiene que tener una acción asociada */
+// rutas de sesión
+router.get("/login", sessionController.new);      // formulario de login
+router.post("/login", sessionController.create);  // crear la sesión
+router.get("/logout", sessionController.destroy); // destruir la sesión
+
 // rutas de quizController
 router.get("/quizes", quizController.index);
 router.get("/quizes/:quizId(\\d+)", quizController.show);
