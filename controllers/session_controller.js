@@ -44,7 +44,7 @@ exports.create = function(req, res) {
 		// se crea req.session.user y se guardan ahí los campos id y username
 		// la sesión se define por la existencia de req.session.user
 		req.session.user = {id: user.id, username: user.username};
-		// se redirecciona al patn anterior al login
+		// se redirecciona al path anterior al login
 		res.redirect(req.session.redir.toString());
 
 	});

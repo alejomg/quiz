@@ -46,6 +46,36 @@ app.use(function(req, res, next) {
         req.session.redir = req.path;
     }
 
+    // si hay usuario logado, se comprueba el tiempo que lleva inactivo
+    if(req.session.user) {
+        if(req.session.hora) {
+            // tiene registrada la hora de la ultima solicitud, se comprueba si es superior a 2 minutos
+            var ultimaSolicitud = new Date().getTime();
+            var intervalo = ultimaSolicitud - req.session.hora;
+            console.log("req.session.hora: " + req.session.hora);
+            console.log("ultimaSolicitud: " + ultimaSolicitud);
+            console.log("intervalo: " + intervalo);
+            if(intervalo <= (2 * 60 * 1000)) {
+                // si es inferior a 2 minutos, se actualiza la hora de la solicitud
+                req.session.hora = ultimaSolicitud;
+            }
+            else {
+                // si es superior a 2 minutos
+                // se elimina req.session.user de la sesión
+                delete req.session.user;
+                // se actualiza la hora de la ultima solicitud
+                req.session.hora = new Date().getTime();
+                // se redirecciona al login
+                res.redirect("/login");
+                return;
+            }
+        }
+        else {
+            // NO tiene registrada la hora de la ultima solicitud, asi que se guarda
+            req.session.hora = new Date().getTime();
+        }
+    }
+
     // se hace visible req.session en las vistas
     res.locals.session = req.session;
     next();
