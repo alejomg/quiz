@@ -23,9 +23,10 @@ router.get("/", function(req, res) {
   });
 });
 
-// autoload: se ejecuta cuando la ruta incluye el parámetro quizId
-// debe definirse antes de las rutas donde se va a usar
-router.param("quizId", quizController.load);
+// autoload: se ejecutan cuando la ruta incluye el parámetro indicado
+// deben definirse antes de las rutas donde se van a usar
+router.param("quizId", quizController.load); // parámetro: quizId
+router.param("commentId", commentController.load); // parámetro: commentId
 
 /* cada ruta que se define en el enrutador tiene que tener una acción asociada */
 // rutas de sesión
@@ -46,6 +47,7 @@ router.delete("/quizes/:quizId(\\d+)", sessionController.loginRequired, quizCont
 // rutas de commentController
 router.get("/quizes/:quizId(\\d+)/comments/new", commentController.new);
 router.post("/quizes/:quizId(\\d+)/comments", commentController.create);
+router.get("/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish", sessionController.loginRequired, commentController.publish);
 
 
 /* GET author page. */

@@ -1,6 +1,29 @@
 // se importa el modelo de DB
 var models = require("../models/models.js");
 
+// autoload: se ejecuta si la ruta incluye commentId
+exports.load = function(req, res, next, commentId) {
+	models.Comment.find({
+		where: { id: Number(commentId) }
+	})
+	.then(
+		function(comment) {
+			if(comment) {
+				req.comment = comment;
+				next();
+			}
+			else {
+				next(new Error("No existe un comentario con id: " + commentId));
+			}
+		}
+	)	
+	.catch(
+		function(error) {
+			next(error);
+		}
+	);
+};
+
 /* acciones del controlador, variables y sus vistas asociadas */
 var _appTitle = "NeoQuiz";
 var _intro = _appTitle + ": el juego de preguntas y respuestas.";
@@ -44,11 +67,27 @@ exports.create = function(req, res, next) {
 				// y despues se redirige a la lista de preguntas
 				comment.save()
 				.then(
-					function(){
+					function() {
 						res.redirect("/quizes/" + req.params.quizId);
 					}
 				);
 			}
+		}
+	)
+	.catch(
+		function(error) {
+			next(error);
+		}
+	);
+};
+
+// GET /quizes/:id/comments/:id/publish
+exports.publish = function(req, res, next) {
+	req.comment.publicado = true;
+	req.comment.save({fields: ["publicado"]})
+	.then(
+		function() {
+			res.redirect("/quizes/" + req.params.quizId);
 		}
 	)
 	.catch(
