@@ -2,6 +2,16 @@
 var _appTitle = "NeoQuiz";
 var _intro = _appTitle + ": el juego de preguntas y respuestas.";
 
+// MW de autorización de accesos HTTP restringidos
+exports.loginRequired = function(req, res, next) {
+	if(req.session.user) {
+		next();
+	}
+	else {
+		res.redirect("/login");
+	}
+};
+
 // GET /login
 exports.new = function(req, res) {
 	var errors  = req.session.errors || {};

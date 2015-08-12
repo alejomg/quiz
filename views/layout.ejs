@@ -24,7 +24,9 @@
 				<table>
 					<tr><td><a href="/">Inicio</a></td></tr>
 					<tr><td><a href="/quizes">Jugar!</a></td></tr>
-					<tr><td><a href="/quizes/new">Crear pregunta</a></td></tr>
+					<% if(session.user) { %>
+						<tr><td><a href="/quizes/new">Crear pregunta</a></td></tr>
+					<% } %>
 					<tr><td>-</td></tr>
 					<tr><td><a href="/author">Créditos</a></td></tr>
 				</table>
