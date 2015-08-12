@@ -1,0 +1,21 @@
+En windows:
+
+- Bajar OpenSSL de https://code.google.com/p/openssl-for-windows/downloads/list
+- Descomprimir en C:\OpenSSL
+- C:\>cd OpenSSL
+- C:\OpenSSL> cd bin
+- C:\OpenSSL\bin>set OPENSSL_CONF=C:\OpenSSL\openssl.cnf
+- C:\OpenSSL\bin>openssl genrsa -out neoquiz-key.pem 2048
+- C:\OpenSSL\bin>openssl req -new -sha256 -key neoquiz-key.pem -out neoquiz-csr.pem
+- Responder preguntas
+- C:\OpenSSL\bin>openssl x509 -req -in neoquiz-csr.pem -signkey neoquiz-key.pem -out neoquiz-cert.pem
+- Cortar archivos y pegarlos en la carpeta certs de quiz
+
+
+En linux:
+
+$ mkdir certs
+$ cd certs
+$ openssl genrsa -out neoquiz-key.pem 2048
+$ openssl req -new -sha256 -key neoquiz-key.pem -out neoquiz-csr.pem
+$ openssl x509 -req -in neoquiz-csr.pem -signkey neoquiz-key.pem -out neoquiz-cert.pem
